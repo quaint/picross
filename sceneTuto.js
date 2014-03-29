@@ -24,6 +24,8 @@ function createSceneTuto (engine) {
     //material1.wireframe = true;
 
     var hiddenLevelY = 0;
+    var hiddenLevelX = 0;
+
     var arrowYUp = BABYLON.Mesh.CreateCylinder("arrowYUp", 1.0, 0.0, 1.0, 7.0, scene);
     var arrowYDown = BABYLON.Mesh.CreateCylinder("arrowYDown", 1.0, 1.0, 0.0, 7.0, scene);
     arrowYDown.parent = arrowYUp;
@@ -31,6 +33,15 @@ function createSceneTuto (engine) {
     arrowYUp.position.x = 10.0;
     arrowYUp.position.z = 10.0;
     arrowYUp.position.y = 9.25;
+
+    var arrowXUp = BABYLON.Mesh.CreateCylinder("arrowXUp", 1.0, 0.0, 1.0, 7.0, scene);
+    var arrowXDown = BABYLON.Mesh.CreateCylinder("arrowYDown", 1.0, 1.0, 0.0, 7.0, scene);
+    arrowXDown.parent = arrowXUp;
+    arrowXDown.position.y = 1.5;
+    arrowXUp.position.x = 10.0;
+    arrowXUp.position.z = 10.0;
+    arrowXUp.position.y = 9.25;
+    arrowXUp.rotation.x = Math.PI/2;
 
     var boxes = {};
     var destroying = false;
@@ -104,15 +115,19 @@ function createSceneTuto (engine) {
                     }
                 }
                 if (pickResult.pickedMesh.name == "arrowYDown") {
-                    hiddenLevelY++;
+                    if (hiddenLevelY < 3) {
+                        hiddenLevelY++;
+                    }
                 } else {
-                    hiddenLevelY--;
+                    if (hiddenLevelY > 0) {
+                        hiddenLevelY--;
+                    }
                 }
                 console.log(hiddenLevelY);
             }
             //pickResult.pickedMesh.material = material1;
             //pickResult.pickedMesh.dispose();
-            if (marking) {
+            if (marking  && !boxes[pickResult.pickedMesh.name].destroyed) {
                 boxes[pickResult.pickedMesh.name].marked = !boxes[pickResult.pickedMesh.name].marked;
                 if (boxes[pickResult.pickedMesh.name].marked) {
                     //unamrk
